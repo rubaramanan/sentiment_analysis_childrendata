@@ -4,7 +4,7 @@ from tensorflow import keras
 from tensorflow.keras.preprocessing.text import text_to_word_sequence, one_hot
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, LSTM, Softmax, Embedding, SpatialDropout1D
+from tensorflow.keras.layers import Dense, LSTM, Softmax, Embedding, SpatialDropout1D, Bidirectional
 from tensorflow.keras.utils import to_categorical
 
 df = pd.read_excel('FYPdatasets.xlsx', sheet_name='Sheet1')
@@ -60,9 +60,9 @@ y_train = to_categorical(df['label'].values, num_classes=10)
 
 model = Sequential()
 model.add(Embedding(50, 128))
-model.add(LSTM(256, dropout=0.2, recurrent_dropout=0.2, return_sequences=True))
-model.add(LSTM(256))
-model.add(Dense(10, activation='sigmoid'))
+model.add(Bidirectional(LSTM(256, dropout=0.2, recurrent_dropout=0.2, return_sequences=True)))
+model.add(Bidirectional(LSTM(256)))
+model.add(Dense(10, activation='softmax'))
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
